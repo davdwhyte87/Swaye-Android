@@ -1,0 +1,20 @@
+<resources>
+    <string name="app_name">Swaye</string>
+
+    <string name="h_name">Name</string>
+    <string name="h_phone">Phone</string>
+    <string name="h_pass">Password</string>
+    <string name="h_code">Code</string>
+    <string name="d_reg">
+        Thanks for eating with us. You will get a code through sms when you register. We hope this makes getting your food easy.
+        Sit back and place an order.
+    </string>
+    <string name="btn_reg">Register</string>
+    <string name="btn_conf">Confirm</string>
+    <string name="btn_login">Login</string>
+    <string name="login">Login</string>
+    <string name="signup">Signup</string>
+    <string name="fpass">Forgot Password</string>
+    <string name="err_reg">Name,phone and password are required.</string>
+    <string name="title_activity_forgot_pass">ForgotPassActivity</string>
+</resources>
