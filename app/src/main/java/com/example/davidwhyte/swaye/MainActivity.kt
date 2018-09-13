@@ -30,6 +30,11 @@ class MainActivity : AppCompatActivity() {
         getMenus()
     }
 
+    override fun onStart() {
+        super.onStart()
+        Log.v("start","heyy me works")
+    }
+
 
     fun displayMenu(){
         viewManager= LinearLayoutManager(this)

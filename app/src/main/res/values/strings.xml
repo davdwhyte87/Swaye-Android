@@ -12,6 +12,7 @@
     <string name="btn_reg">Register</string>
     <string name="btn_conf">Confirm</string>
     <string name="btn_login">Login</string>
+    <string name="btn_send_code">Send code</string>
     <string name="login">Login</string>
     <string name="signup">Signup</string>
     <string name="fpass">Forgot Password</string>
