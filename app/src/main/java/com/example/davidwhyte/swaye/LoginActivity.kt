@@ -1,5 +1,6 @@
 package com.example.davidwhyte.swaye
 
+import android.content.ContentValues
 import android.content.Intent
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
@@ -12,6 +13,7 @@ import com.android.volley.Response
 import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.Volley
 import com.bumptech.glide.Glide
+import com.example.davidwhyte.swaye.Contracts.UserContract
 import org.json.JSONObject
 
 class LoginActivity : AppCompatActivity() {
@@ -76,8 +78,13 @@ class LoginActivity : AppCompatActivity() {
                 Response.Listener { response ->
                     if(response["code"]==1){
                         Log.v("dumpresponse",response.toString())
-                        val intent= Intent(this,ConfirmCodeActivity::class.java)
-                        startActivity(intent)
+//                        val intent= Intent(this,ConfirmCodeActivity::class.java)
+//                        startActivity(intent)
+                        //create a user in local db
+                        val db=UserContract.RecordEntry.SwayeDbHelper(this)
+                        val data=ContentValues().apply {
+                            put(UserContract.UserEntry.COLUMN_NAME_NAME=)
+                        }
                         finish()
                     }
                     else{
@@ -113,7 +120,7 @@ class LoginActivity : AppCompatActivity() {
         phone=phoneField.text.toString()
         passField=findViewById(R.id.f_pass)
         pass=passField.text.toString()
-        Log.v("regdata",name+pass+phone)
+        Log.v("regdata",pass+phone)
 
         if(phone.isEmpty()||pass.isEmpty()){
             Toast.makeText(this,"Your phone and password is required", Toast.LENGTH_SHORT).show()
