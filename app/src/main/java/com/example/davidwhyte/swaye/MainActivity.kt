@@ -8,19 +8,22 @@ import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.util.Log
 import android.view.View
-import com.android.volley.AuthFailureError
-import com.android.volley.Request
-import com.android.volley.RequestQueue
-import com.android.volley.Response
 import com.android.volley.toolbox.*
 import com.example.davidwhyte.swaye.Adapters.MenuAdapter
 import com.example.davidwhyte.swaye.Contracts.UserContract
 import com.example.davidwhyte.swaye.models.Menu
 import org.json.JSONObject
 import android.R.menu
+import android.os.AsyncTask
 import android.view.MenuInflater
 import android.view.MenuItem
+import android.widget.ImageView
+import android.widget.LinearLayout
+import android.widget.TextView
+import com.android.volley.*
+import com.bumptech.glide.Glide
 import org.json.JSONArray
+import org.w3c.dom.Text
 
 
 class MainActivity : AppCompatActivity() {
@@ -30,11 +33,13 @@ class MainActivity : AppCompatActivity() {
     var uid:String=""
     var token:String=""
     var menus=ArrayList<Menu>()
+    lateinit var loader:ImageView
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        displayMenu()
         getMenus()
+
+
     }
 
     override fun onStart() {
@@ -63,14 +68,7 @@ class MainActivity : AppCompatActivity() {
 
     fun displayMenu(){
         viewManager= LinearLayoutManager(this)
-        val menuList=ArrayList<Menu>()
-        var menu=Menu()
-        menu.image="https://www.seriouseats.com/recipes/images/2016/01/20160206-fried-rice-food-lab-68-1500x1125.jpg"
-        menu.name="Fried Rice"
-        menu.price=1000
-        menu.qty=39
-        menuList.add(menu)
-        viewAdapter=MenuAdapter(menuList,this)
+        viewAdapter=MenuAdapter(menus,this)
         recyclerView=findViewById<RecyclerView>(R.id.menu_rv).apply {
             layoutManager=viewManager
             adapter=viewAdapter
@@ -78,6 +76,9 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun getMenus(){
+        var textvnetwork_err=findViewById<LinearLayout>(R.id.network_err)
+        textvnetwork_err.visibility=View.GONE
+        start_loader()
         val queue=Volley.newRequestQueue(this)
         val appData=AppData()
         val url = appData.api_urlo+"menu"
@@ -86,21 +87,37 @@ class MainActivity : AppCompatActivity() {
 
         val jsonObjectRequest:JsonObjectRequest = object:JsonObjectRequest(Request.Method.GET, url, null,
                 Response.Listener { response ->
-                    Log.v("testserver",response.toString())
-                    val obj:JSONArray=response.getJSONArray("data")
-                    var count=obj.length()
-                    while (count>0){
-                       val menu_obj:JSONObject= obj.getJSONObject(count-1)
-                        val menu=Menu()
-                        menu.image=menu_obj.getString("image")
-                        menu.name=menu_obj.getString("name")
-                        menu.qty=menu_obj.getString("qty").toInt()
-                        menu.price=menu_obj.getString("price").toInt()
-                        menus.add(menu)
-                        count--
+                    if(response["code"]==1){
+                        Log.v("testserver",response.toString())
+                        val obj:JSONArray=response.getJSONArray("data")
+                        var count=obj.length()
+                        while (count>0){
+                            val menu_obj:JSONObject= obj.getJSONObject(count-1)
+                            val menu=Menu()
+                            menu.image=menu_obj.getString("image")
+                            menu.name=menu_obj.getString("name")
+                            menu.id=menu_obj.getString("_id")
+                            menu.qty=menu_obj.getString("qty").toInt()
+                            menu.price=menu_obj.getString("price").toInt()
+                            menus.add(menu)
+                            count--
+                        }
+                        Log.v("testserver",menus.toString())
+                        stop_loader()
+                        displayMenu()
+                    }else{
+                        logout()
                     }
+
                 },
                 Response.ErrorListener { error ->
+                    stop_loader()
+                    var textvnetwork_err=findViewById<LinearLayout>(R.id.network_err)
+                    textvnetwork_err.visibility=View.VISIBLE
+                    var retry_txt=findViewById<TextView>(R.id.retry)
+                    retry_txt.setOnClickListener {
+                        getMenus()
+                    }
                     Log.v("testserver",error.toString())
                 }
         ){
@@ -109,11 +126,15 @@ class MainActivity : AppCompatActivity() {
                 var params= HashMap<String,String>(super.getHeaders())
                 params.put("Content-Type","application/json")
                 params.put("token",token)
+                Log.v("reqtoken",token)
                 //..add other headers
                 return params
             }
         }
 
+        jsonObjectRequest.setRetryPolicy(DefaultRetryPolicy(10000,
+                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT))
 // Add the request to the RequestQueue.
         queue.add(jsonObjectRequest)
     }
@@ -143,5 +164,15 @@ class MainActivity : AppCompatActivity() {
         startActivity(intent)
         finish()
     }
+    fun start_loader(){
+        loader=findViewById(R.id.loader)
+        loader.visibility= View.VISIBLE
+        Glide.with(this).asGif().load(R.drawable.load).into(loader)
 
+    }
+
+    fun stop_loader(){
+        loader=findViewById(R.id.loader)
+        loader.visibility= View.GONE
+    }
 }

@@ -34,7 +34,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:inputType="phone"
+                android:inputType="textEmailAddress"
                 android:hint="@string/h_email" />
             <Button
                 android:id="@+id/btn_send_code"

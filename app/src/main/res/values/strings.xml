@@ -21,4 +21,7 @@
     <string name="title_activity_forgot_pass">ForgotPassActivity</string>
 
     <string name="menu_logout">Logout</string>
+
+    <string name="network_err">There is a network error</string>
+    <string name="retry"><u>Retry</u></string>
 </resources>
