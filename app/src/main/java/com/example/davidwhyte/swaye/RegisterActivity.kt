@@ -17,10 +17,10 @@ import org.json.JSONObject
 
 class RegisterActivity : AppCompatActivity() {
     lateinit var nameField:EditText
-    lateinit var phoneField:EditText
+    lateinit var emailField:EditText
     lateinit var passField:EditText
     lateinit var name:String
-    lateinit var phone:String
+    lateinit var email:String
     lateinit var pass:String
 
     lateinit var reg_btn:Button
@@ -66,7 +66,7 @@ class RegisterActivity : AppCompatActivity() {
 // Formulate the request and handle the response.
         var req: JSONObject = JSONObject()
         req.put("name",name)
-        req.put("phone",phone)
+        req.put("email",email)
         req.put("password",pass)
         val jsonObjectRequest: JsonObjectRequest = object: JsonObjectRequest(Request.Method.POST, url, req,
                 Response.Listener { response ->
@@ -107,17 +107,17 @@ class RegisterActivity : AppCompatActivity() {
     fun validate():Boolean{
         nameField=findViewById(R.id.f_name)
         name=nameField.text.toString()
-        phoneField=findViewById(R.id.f_phone)
-        phone=phoneField.text.toString()
+        emailField=findViewById(R.id.f_email)
+        email=emailField.text.toString()
         passField=findViewById(R.id.f_pass)
         pass=passField.text.toString()
-        Log.v("regdata",name+pass+phone)
+        Log.v("regdata",name+pass+email)
 
-        if(name.isEmpty()||phone.isEmpty()||pass.isEmpty()){
+        if(name.isEmpty()||email.isEmpty()||pass.isEmpty()){
             Toast.makeText(this,R.string.err_reg,Toast.LENGTH_SHORT).show()
             return false
         }
-        if(phone.length<8){
+        if(email.length<8){
             Toast.makeText(this,"Phone must not be less that 8 characters",Toast.LENGTH_SHORT).show()
             return false
         }

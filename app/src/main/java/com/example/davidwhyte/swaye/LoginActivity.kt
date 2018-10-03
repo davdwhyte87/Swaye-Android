@@ -4,6 +4,7 @@ import android.content.ContentValues
 import android.content.Intent
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.util.JsonReader
 import android.util.Log
 import android.view.View
 import android.widget.*
@@ -14,16 +15,19 @@ import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.Volley
 import com.bumptech.glide.Glide
 import com.example.davidwhyte.swaye.Contracts.UserContract
+import org.json.JSONArray
+import org.json.JSONException
 import org.json.JSONObject
 
 class LoginActivity : AppCompatActivity() {
     lateinit var nameField: EditText
-    lateinit var phoneField: EditText
+    lateinit var emailField: EditText
     lateinit var passField: EditText
     lateinit var name:String
-    lateinit var phone:String
+    lateinit var email:String
     lateinit var pass:String
-
+    lateinit var uid:String
+    lateinit var token:String
     lateinit var login_btn: Button
     lateinit var loader_btn: ImageButton
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -72,19 +76,32 @@ class LoginActivity : AppCompatActivity() {
 
 // Formulate the request and handle the response.
         var req: JSONObject = JSONObject()
-        req.put("phone",phone)
+        req.put("email",email)
         req.put("password",pass)
+
         val jsonObjectRequest: JsonObjectRequest = object: JsonObjectRequest(Request.Method.POST, url, req,
                 Response.Listener { response ->
                     if(response["code"]==1){
-                        Log.v("dumpresponse",response.toString())
+                        Log.v("dumpresponse",response["data"].toString())
 //                        val intent= Intent(this,ConfirmCodeActivity::class.java)
 //                        startActivity(intent)
-                        //create a user in local db
-                        val db=UserContract.RecordEntry.SwayeDbHelper(this)
-                        val data=ContentValues().apply {
-                            put(UserContract.UserEntry.COLUMN_NAME_NAME=)
+                        try{
+                            val obj:JSONObject=response.getJSONObject("data")
+                            token=response["token"].toString()
+                            uid=obj.getString("_id")
+                            name=obj.getString("name")
                         }
+                        catch (e:JSONException){
+                            e.printStackTrace()
+                        }
+                        val dbhelper=UserContract.UserEntry.SwayeDbHelper(this)
+                        val db=dbhelper.writableDatabase
+                        val data=ContentValues().apply {
+                            put(UserContract.UserEntry.COLUMN_NAME_UID,uid)
+                            put(UserContract.UserEntry.COLUMN_NAME_TOKEN,token)
+                            put(UserContract.UserEntry.COLUMN_NAME_NAME,name)
+                        }
+                        db.insert(UserContract.UserEntry.TABLE_NAME,null,data)
                         finish()
                     }
                     else{
@@ -116,17 +133,17 @@ class LoginActivity : AppCompatActivity() {
         queue.add(jsonObjectRequest)
     }
     fun validate():Boolean{
-        phoneField=findViewById(R.id.f_phone)
-        phone=phoneField.text.toString()
+        emailField=findViewById(R.id.f_email)
+        email=emailField.text.toString()
         passField=findViewById(R.id.f_pass)
         pass=passField.text.toString()
-        Log.v("regdata",pass+phone)
+        Log.v("regdata",pass+email)
 
-        if(phone.isEmpty()||pass.isEmpty()){
+        if(email.isEmpty()||pass.isEmpty()){
             Toast.makeText(this,"Your phone and password is required", Toast.LENGTH_SHORT).show()
             return false
         }
-        if(phone.length<8){
+        if(email.length<8){
             Toast.makeText(this,"Phone must not be less that 8 characters", Toast.LENGTH_SHORT).show()
             return false
         }

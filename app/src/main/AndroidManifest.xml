@@ -28,7 +28,8 @@
         <activity
             android:name=".ForgotPassActivity"
             android:label="@string/title_activity_forgot_pass"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".FChangePass"></activity>
     </application>
 
 </manifest>

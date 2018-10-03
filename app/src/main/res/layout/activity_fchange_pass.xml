@@ -4,9 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    tools:context=".RegisterActivity">
-
+    tools:context=".FChangePass">
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -14,11 +12,6 @@
         style="@style/fmb"
         android:orientation="vertical">
 
-        <!--<ImageView-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_gravity="center"-->
-            <!--android:src="@drawable/swaye" />-->
         <TextView
             android:layout_width="wrap_content"
             android:layout_gravity="center"
@@ -35,22 +28,13 @@
             android:padding="20dp">
 
             <EditText
-                android:id="@+id/f_name"
+                android:id="@+id/f_code"
                 style="@style/form"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:inputType="text"
-                android:hint="@string/h_name" />
-
-            <EditText
-                android:id="@+id/f_email"
-                style="@style/form"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:inputType="textEmailAddress"
-                android:hint="@string/h_email" />
+                android:inputType="number"
+                android:hint="@string/h_code" />
             <EditText
                 android:id="@+id/f_pass"
                 style="@style/form"
@@ -60,9 +44,9 @@
                 android:inputType="textPassword"
                 android:hint="@string/h_pass" />
             <Button
-                android:id="@+id/btn_reg"
+                android:id="@+id/btn_change"
                 style="@style/f_btn"
-                android:text="@string/btn_reg"
+                android:text="@string/cpass"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
             <ImageButton
@@ -73,20 +57,6 @@
                 android:src="@drawable/load"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"/>
-            <LinearLayout
-                android:padding="10dp"
-                android:orientation="horizontal"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-                <TextView
-                    android:id="@+id/txt_login"
-                    android:text="@string/login"
-                    style="@style/atxt"
-                    android:layout_gravity="center"
-                    android:textAlignment="center"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
-            </LinearLayout>
         </LinearLayout>
 
     </LinearLayout>

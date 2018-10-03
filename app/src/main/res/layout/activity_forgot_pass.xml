@@ -29,13 +29,13 @@
             android:padding="20dp">
 
             <EditText
-                android:id="@+id/f_phone"
+                android:id="@+id/f_email"
                 style="@style/form"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:inputType="phone"
-                android:hint="@string/h_phone" />
+                android:hint="@string/h_email" />
             <Button
                 android:id="@+id/btn_send_code"
                 style="@style/f_btn"

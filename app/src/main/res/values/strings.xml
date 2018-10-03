@@ -2,7 +2,7 @@
     <string name="app_name">Swaye</string>
 
     <string name="h_name">Name</string>
-    <string name="h_phone">Phone</string>
+    <string name="h_email">Email</string>
     <string name="h_pass">Password</string>
     <string name="h_code">Code</string>
     <string name="d_reg">
@@ -16,6 +16,9 @@
     <string name="login">Login</string>
     <string name="signup">Signup</string>
     <string name="fpass">Forgot Password</string>
+    <string name="cpass">Change</string>
     <string name="err_reg">Name,phone and password are required.</string>
     <string name="title_activity_forgot_pass">ForgotPassActivity</string>
+
+    <string name="menu_logout">Logout</string>
 </resources>

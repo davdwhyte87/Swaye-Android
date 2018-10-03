@@ -1,10 +1,8 @@
 package com.example.davidwhyte.swaye
 
-import android.content.ContentValues
 import android.content.Intent
-import android.os.Bundle
-import android.support.design.widget.Snackbar
 import android.support.v7.app.AppCompatActivity
+import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.Button
@@ -17,44 +15,64 @@ import com.android.volley.Response
 import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.Volley
 import com.bumptech.glide.Glide
-import com.example.davidwhyte.swaye.Contracts.UserContract
-
-import kotlinx.android.synthetic.main.activity_forgot_pass.*
 import org.json.JSONObject
 
-class ForgotPassActivity : AppCompatActivity() {
+class FChangePass : AppCompatActivity() {
 
-    lateinit var btn_send_code:Button
-    lateinit var email_field:EditText
-    lateinit var email:String
-    lateinit var btn_load:ImageButton
+    lateinit var btn_change:Button
+    lateinit var codeField:EditText
+    lateinit var passField:EditText
+    lateinit var code:String
+    lateinit var pass:String
     lateinit var loader_btn: ImageButton
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_forgot_pass)
-
+        setContentView(R.layout.activity_fchange_pass)
     }
 
-    fun handler(){
-        btn_send_code=findViewById(R.id.btn_send_code)
-        btn_send_code.setOnClickListener {
-            //validate
+    fun handlers(){
+        btn_change=findViewById(R.id.btn_change)
+        btn_change.setOnClickListener {
             if(validate()){
-                //inflate loader
                 start_loader()
             }
         }
     }
 
+    fun start_loader(){
+        loader_btn=findViewById(R.id.btn_load)
+        loader_btn.visibility= View.VISIBLE
+        Glide.with(this).asGif().load(R.drawable.load).into(loader_btn)
+        btn_change.visibility= View.GONE
+    }
+    fun stop_loader(){
+        loader_btn=findViewById(R.id.btn_load)
+        loader_btn.visibility= View.GONE
+        btn_change.visibility= View.VISIBLE
+    }
+
+
+    fun validate():Boolean{
+        codeField=findViewById(R.id.f_code)
+        code=codeField.text.toString()
+        passField=findViewById(R.id.f_pass)
+        pass=passField.text.toString()
+        if(code.isEmpty()||pass.isEmpty()){
+            Toast.makeText(this,"The code and new password is required",Toast.LENGTH_SHORT).show()
+            return false
+        }
+        return true
+    }
+
     fun send_post(){
         val queue= Volley.newRequestQueue(this)
         var app_data=AppData()
-        val url = app_data.api_url+"forgot_pass"
+        val url = app_data.api_url+"fchange_pass"
 
 // Formulate the request and handle the response.
         var req: JSONObject = JSONObject()
-        req.put("email",email)
+        req.put("code",code)
+        req.put("new_password",pass)
         val jsonObjectRequest: JsonObjectRequest = object: JsonObjectRequest(Request.Method.POST, url, req,
                 Response.Listener { response ->
                     if(response["code"]==1){
@@ -90,29 +108,6 @@ class ForgotPassActivity : AppCompatActivity() {
 
 // Add the request to the RequestQueue.
         queue.add(jsonObjectRequest)
-    }
-
-    fun start_loader(){
-        loader_btn=findViewById(R.id.btn_load)
-        loader_btn.visibility= View.VISIBLE
-        Glide.with(this).asGif().load(R.drawable.load).into(loader_btn)
-        btn_send_code.visibility= View.GONE
-    }
-    fun stop_loader(){
-        loader_btn=findViewById(R.id.btn_load)
-        loader_btn.visibility= View.GONE
-        btn_send_code.visibility= View.VISIBLE
-    }
-
-    fun validate():Boolean{
-        email_field=findViewById(R.id.f_email)
-        email=email_field.text.toString()
-        if(email.isEmpty()){
-            Toast.makeText(this,"Your code is required",Toast.LENGTH_SHORT).show()
-            return false
-        }
-
-        return true
     }
 
 }
