@@ -2,6 +2,7 @@ package com.example.davidwhyte.swaye.Adapters
 
 import android.content.Context
 import android.support.constraint.ConstraintLayout
+import android.support.v7.widget.CardView
 import android.support.v7.widget.RecyclerView
 import android.util.Log
 import android.view.LayoutInflater
@@ -18,7 +19,7 @@ class MenuAdapter(val items:ArrayList<Menu>,val context:Context):RecyclerView.Ad
     lateinit var cart_btn:ImageButton
     lateinit var cart:ArrayList<String>
     override fun onCreateViewHolder(p0: ViewGroup, p1: Int): ViewHolder {
-        val view=LayoutInflater.from(p0.context).inflate(R.layout.menu_item,p0,false) as ConstraintLayout
+        val view=LayoutInflater.from(p0.context).inflate(R.layout.menu_item,p0,false) as CardView
         cart= ArrayList()
         return ViewHolder(view)
     }
